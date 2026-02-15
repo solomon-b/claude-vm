@@ -1,0 +1,6 @@
+**/.projectile
+**/.direnv
+/result
+/.direnv/
+/.projectile-cache.eld
+/.envrc.local
