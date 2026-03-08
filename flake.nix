@@ -35,7 +35,7 @@
               };
               config = {
                 source = ''"$CLAUDE_VM_CONFIG_DIR"'';
-                target = "/run/claude-vm-config";
+                target = "/mnt/claude-vm-config";
                 securityModel = "none";
               };
             };
@@ -73,10 +73,10 @@
               [ "$(whoami)" = "claude" ] || return
 
               args=()
-              if [ -f /run/claude-vm-config/claude-args ]; then
+              if [ -f /mnt/claude-vm-config/claude-args ]; then
                 while IFS= read -r line; do
                   [ -n "$line" ] && args+=("$line")
-                done < /run/claude-vm-config/claude-args
+                done < /mnt/claude-vm-config/claude-args
               fi
 
               cd /workspace 2>/dev/null || true
