@@ -107,7 +107,7 @@
 
           export CLAUDE_VM_CONFIG_DIR="$CONFIG_DIR"
           export WORKSPACE_DIR="$(pwd)"
-          exec ${vmBuild}/bin/run-claude-vm-vm
+          ${vmBuild}/bin/run-claude-vm-vm
         '';
 
       apps.${system}.default = {
