@@ -65,7 +65,28 @@
               loader.grub.enable = false;
             };
 
-            services.getty.autologinUser = "root";
+            # ---------- unprivileged VM user ----------
+            users.users.claude = {
+              isNormalUser = true;
+              home = "/home/claude";
+            };
+
+            services.getty.autologinUser = "claude";
+
+            # ---------- 9p mount fixup for cross-platform UID mismatch ----------
+            # On macOS the host uid is 501 while the guest normal user is 1000.
+            # "access=user" makes the 9p client skip generic_permission for the
+            # mounting user so the guest user can read/write regardless of host uid.
+            fileSystems."/workspace" = {
+              device = "workspace";
+              fsType = "9p";
+              options = ["trans=virtio" "version=9p2000.L" "access=user" "nofail"];
+            };
+            fileSystems."/mnt/claude-vm-config" = {
+              device = "config";
+              fsType = "9p";
+              options = ["trans=virtio" "version=9p2000.L" "access=user" "nofail"];
+            };
 
             # ---------- packages ----------
             nixpkgs = {
@@ -84,7 +105,7 @@
 
             # ---------- login shell launches claude ----------
             programs.bash.interactiveShellInit = ''
-              [ "$(whoami)" = "root" ] || return
+              [ "$(whoami)" = "claude" ] || return
 
               args=()
               if [ -f /mnt/claude-vm-config/claude-args ]; then
