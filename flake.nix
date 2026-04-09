@@ -36,7 +36,7 @@
         {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
-          # ---------- host / guest plumbing ----------
+          # Host / guest plumbing
           virtualisation = {
             cores = 4;
             graphics = false;
@@ -55,7 +55,7 @@
             };
           };
 
-          # ---------- boot / console ----------
+          # Boot / console
           boot = {
             initrd.kernelModules = [
               "9p"
@@ -67,7 +67,7 @@
 
           services.getty.autologinUser = "root";
 
-          # ---------- packages ----------
+          # Packages
           nixpkgs = {
             config.allowUnfree = true;
             overlays = [ claude-code-nix.overlays.default ];
@@ -79,13 +79,13 @@
             vim
           ];
 
-          # ---------- nix flakes in guest ----------
+          # Nix flakes in guest
           nix.settings.experimental-features = [
             "nix-command"
             "flakes"
           ];
 
-          # ---------- login shell launches claude ----------
+          # Login shell launches claude
           programs.bash.interactiveShellInit = ''
             [ "$(whoami)" = "root" ] || return
 
@@ -101,7 +101,7 @@
             systemctl poweroff -f
           '';
 
-          # ---------- misc ----------
+          # Misc
           networking.hostName = "claude-vm";
           system.stateVersion = "25.05";
         };
